@@ -19,13 +19,19 @@ export interface BSMessageModalButtonConfig {
 @Component({
     selector: 'modal-title',
     encapsulation: ViewEncapsulation.None,
-    template: `<div [ngClass]="context.headerClass" [ngSwitch]="titleHtml">
-      <button *ngIf="context.showClose" type="button" class="close"
-              aria-label="Close" (click)="dialog.dismiss()">
-          <span aria-hidden="true">×</span>
-      </button>
-      <div *ngSwitchCase="1" [innerHtml]="context.titleHtml"></div>
-      <h3 *ngSwitchDefault class="modal-title">{{context.title}}</h3>
+    template: `<div [ngClass]="context.headerClass">
+      @if (context.showClose) {
+        <button type="button" class="close"
+                aria-label="Close" (click)="dialog.dismiss()">
+            <span aria-hidden="true">×</span>
+        </button>
+      }
+      @if (titleHtml) {
+        <div [innerHtml]="context.titleHtml"></div>
+      }
+      @else {
+        <h3 class="modal-title">{{context.title}}</h3>
+      }
  </div>`,
     standalone: false
 })
@@ -36,8 +42,8 @@ export class BSMessageModalTitle {
     this.context = dialog.context;
   }
 
-  get titleHtml(): number {
-    return this.context.titleHtml ? 1 : 0;
+  get titleHtml(): boolean {
+    return this.context.titleHtml ? true : false;
   }
 }
 
@@ -49,18 +55,20 @@ export class BSMessageModalTitle {
     margin-top: 10px;
   }`],
     template: `<div [ngClass]="context.bodyClass">
-    <div [innerHtml]="context.message"></div>
-      <div *ngIf="context.showInput" class="form-group">
-        <input autofocus #input
+      <div [innerHtml]="context.message"></div>
+      @if (context.showInput) {
+        <div class="form-group">
+          <input autofocus #input
             name="bootstrap"
             type="text"
             class="form-control"
             [value]="context.defaultValue"
             (change)="context.defaultValue = input.value"
             placeholder="{{context.placeholder}}">
+          </div>
+        }
       </div>
-    </div>
-`,
+    `,
     standalone: false
 })
 // tslint:disable-next-line:component-class-suffix
@@ -87,10 +95,12 @@ export class BSMessageModalBody {
     selector: 'modal-footer',
     encapsulation: ViewEncapsulation.None,
     template: `<div [ngClass]="dialog.context.footerClass">
-    <button *ngFor="let btn of dialog.context.buttons;"
-            [ngClass]="btn.cssClass"
-            (click)="onClick(btn, $event)">{{btn.caption}}</button>
-</div>`,
+      @for (btn of dialog.context.buttons; track btn) {
+        <button
+          [ngClass]="btn.cssClass"
+        (click)="onClick(btn, $event)">{{btn.caption}}</button>
+      }
+    </div>`,
     standalone: false
 })
 // tslint:disable-next-line:component-class-suffix

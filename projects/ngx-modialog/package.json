@@ -1,6 +1,6 @@
 {
   "name": "@salesware/ngx-modialog",
-  "version": "20.0.0",
+  "version": "21.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
+    "@angular/common": "^21.1.2",
+    "@angular/core": "^21.1.2"
   }
 }
