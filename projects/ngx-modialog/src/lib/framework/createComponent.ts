@@ -1,7 +1,5 @@
 import {
   ComponentRef,
-  ComponentFactory,
-  ComponentFactoryResolver,
   Injector,
   ViewContainerRef
 } from '@angular/core';
@@ -14,19 +12,11 @@ export interface CreateComponentArgs {
 }
 
 export function createComponent(instructions: CreateComponentArgs): ComponentRef<any> {
-  const injector: Injector =  instructions.injector || instructions.vcRef.injector;
-  const cmpFactory: ComponentFactory<any>
-    = injector.get(ComponentFactoryResolver).resolveComponentFactory(instructions.component);
+  const injector: Injector = instructions.injector || instructions.vcRef.injector;
 
-  if (instructions.vcRef) {
-    return instructions.vcRef.createComponent(
-      cmpFactory,
-      instructions.vcRef.length,
-      injector,
-      instructions.projectableNodes
-    );
-  } else {
-    return cmpFactory.create(injector);
-  }
+  return instructions.vcRef.createComponent(instructions.component, {
+    index: instructions.vcRef.length,
+    injector,
+    projectableNodes: instructions.projectableNodes
+  });
 }
-
