@@ -8,7 +8,6 @@
     "publish": "npm publish --access=public dist/ngx-modialog/"
   },
   "dependencies": {
-    "@angular/animations": "^22.0.7",
     "@angular/common": "^22.0.7",
     "@angular/compiler": "^22.0.7",
     "@angular/core": "^22.0.7",
